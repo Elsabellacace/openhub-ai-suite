@@ -1,0 +1,576 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OpenHub-AI Suite: Open Agent-AI & Auditra</title>
+  <meta name="description" content="Suite de asistentes de IA para lanzar negocios digitales y organizar tus finanzas como freelancer o pequeño negocio." />
+  <style>
+    :root {
+      --bg: #050816;
+      --bg-secondary: #0b1020;
+      --primary: #38bdf8;
+      --accent: #a855f7;
+      --text: #f9fafb;
+      --muted: #9ca3af;
+      --card: #0f172a;
+      --border: #1f2937;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #111827 0, #020617 45%, #000 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: linear-gradient(to bottom, rgba(15,23,42,0.95), rgba(15,23,42,0.8), transparent);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(148,163,184,0.2);
+    }
+    .nav {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0.75rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .nav-logo {
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+    }
+    .nav-logo span.icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 20% 0, #e5e7eb, #38bdf8 45%, #0ea5e9 65%, #1d4ed8 100%);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      box-shadow: 0 0 20px rgba(56,189,248,0.6);
+    }
+    .nav-links {
+      display: flex;
+      gap: 1.25rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 3rem;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2.5fr);
+      gap: 2rem;
+      align-items: center;
+      padding: 2rem 0 2.5rem;
+    }
+    @media (max-width: 800px) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.25rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.4);
+      background: radial-gradient(circle at top left, rgba(56,189,248,0.25), transparent 60%);
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+    .pill strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+    .hero h1 {
+      font-size: clamp(2.1rem, 4vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.75rem;
+    }
+    .gradient-text {
+      background: linear-gradient(to right, #38bdf8, #a855f7, #f97316);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+    .hero p.sub {
+      color: var(--muted);
+      font-size: 0.98rem;
+      max-width: 32rem;
+      margin-bottom: 1.5rem;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.65rem 1.3rem;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.18s ease-out;
+      white-space: nowrap;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #38bdf8, #0ea5e9, #6366f1);
+      color: #0b1120;
+      font-weight: 600;
+      box-shadow: 0 15px 45px rgba(56,189,248,0.4);
+    }
+    .btn-primary:hover {
+      transform: translateY(-1px) scale(1.01);
+      box-shadow: 0 20px 60px rgba(56,189,248,0.55);
+    }
+    .btn-ghost {
+      background: rgba(15,23,42,0.9);
+      border-color: var(--border);
+      color: var(--muted);
+    }
+    .btn-ghost:hover {
+      border-color: var(--primary);
+      color: var(--text);
+    }
+    .hero-note {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .hero-card {
+      border-radius: 1.25rem;
+      border: 1px solid rgba(148,163,184,0.24);
+      background: radial-gradient(circle at top, rgba(56,189,248,0.08), transparent 55%),
+                  radial-gradient(circle at bottom, rgba(168,85,247,0.12), transparent 60%),
+                  rgba(15,23,42,0.96);
+      padding: 1.25rem;
+      box-shadow: 0 22px 60px rgba(15,23,42,0.95);
+    }
+    .hero-card-title {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
+    }
+    .hero-card-main {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .hero-highlight {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 0.6rem;
+      font-size: 0.8rem;
+    }
+    @media (max-width: 500px) {
+      .hero-highlight {
+        grid-template-columns: 1fr;
+      }
+    }
+    .mini-tag {
+      font-size: 0.7rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.45);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      color: var(--muted);
+      margin-bottom: 0.25rem;
+    }
+    .mini-tag span.dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 10px rgba(34,197,94,0.7);
+    }
+    .hero-metrics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+      font-size: 0.78rem;
+    }
+    .metric {
+      padding: 0.5rem 0.7rem;
+      border-radius: 0.9rem;
+      border: 1px solid rgba(30,64,175,0.7);
+      background: radial-gradient(circle at top left, rgba(56,189,248,0.3), transparent 55%);
+    }
+    .metric span.num {
+      font-weight: 700;
+      display: block;
+      font-size: 0.95rem;
+    }
+
+    .section {
+      margin-top: 2.5rem;
+    }
+    .section-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.5rem;
+      align-items: baseline;
+      margin-bottom: 1.25rem;
+    }
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+    .section-sub {
+      font-size: 0.9rem;
+      color: var(--muted);
+      max-width: 32rem;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.25rem;
+    }
+    @media (max-width: 800px) {
+      .cards-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+    .card {
+      border-radius: 1.1rem;
+      border: 1px solid rgba(148,163,184,0.25);
+      background: linear-gradient(145deg, rgba(15,23,42,0.96), #020617);
+      padding: 1.1rem 1.1rem 1.2rem;
+      box-shadow: 0 18px 40px rgba(15,23,42,0.85);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+      align-items: center;
+    }
+    .badge {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      padding: 0.14rem 0.55rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.55);
+      color: var(--muted);
+    }
+    .card h3 {
+      font-size: 1rem;
+      margin-bottom: 0.25rem;
+    }
+    .card p {
+      font-size: 0.87rem;
+      color: var(--muted);
+    }
+    .card ul {
+      margin-top: 0.7rem;
+      list-style: none;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .card ul li {
+      display: flex;
+      gap: 0.4rem;
+      margin-bottom: 0.25rem;
+    }
+    .card ul li span.bullet {
+      font-size: 0.9rem;
+      color: var(--primary);
+      margin-top: 0.05rem;
+    }
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 0.9rem;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .card-cta {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .card-cta span {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .disclaimer {
+      margin-top: 2rem;
+      padding-top: 1.25rem;
+      border-top: 1px dashed rgba(148,163,184,0.4);
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    footer {
+      border-top: 1px solid rgba(15,23,42,1);
+      background: #020617;
+      margin-top: 2.5rem;
+    }
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.25rem 1.25rem 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.75rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .footer-links a {
+      text-decoration: none;
+      color: var(--muted);
+    }
+    .footer-links a:hover {
+      color: var(--text);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="nav">
+      <div class="nav-logo">
+        <span class="icon">∞</span>
+        OPENHUB-AI SUITE
+      </div>
+      <div class="nav-links">
+        <a href="#agents">Agentes</a>
+        <a href="#como-funciona">Cómo funciona</a>
+        <a href="#legal">Legal</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <div class="pill">
+          <span>Suite de asistentes de IA</span>
+          <span>·</span>
+          <strong>Diseño, negocio y finanzas</strong>
+        </div>
+        <h1>
+          Lanza y organiza tu negocio con
+          <span class="gradient-text">Open Agent-AI + Auditra</span>
+        </h1>
+        <p class="sub">
+          Open Agent-AI te ayuda a crear y lanzar negocios digitales en 48h.
+          Auditra te guía para ordenar ingresos, gastos e impuestos como freelancer o pequeño negocio.
+          Todo en el ecosistema OpenHub-AI.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="https://chatgpt.com/g/g-690424d08214819191117490375ace89-open-agent-ai" target="_blank" rel="noopener noreferrer">
+            Usar Open Agent-AI
+          </a>
+          <a class="btn btn-ghost" href="https://chatgpt.com/g/g-692d0fd4996c81918fdb7fbdaa916ef4-auditra" target="_blank" rel="noopener noreferrer">
+            Probar Auditra
+          </a>
+        </div>
+        <p class="hero-note">
+          Español primero, inglés soportado. Diseñado para creadores, freelancers y pequeños negocios en LATAM.
+        </p>
+      </div>
+
+      <aside class="hero-card">
+        <div class="hero-card-title">Resumen rápido · Quick view</div>
+        <div class="hero-card-main">
+          <div class="hero-highlight">
+            <div>
+              <div class="mini-tag">
+                <span class="dot"></span>
+                Open Agent-AI · Lanzamiento 48h
+              </div>
+              <p>
+                Genera ideas, nombre, branding, estructura de página y plan de acción
+                para lanzar un negocio digital sin enredarte en lo técnico.
+              </p>
+            </div>
+            <div>
+              <div class="mini-tag">
+                <span class="dot"></span>
+                Auditra · Finanzas claras
+              </div>
+              <p>
+                Ordena ingresos, gastos y obligaciones básicas.
+                No es asesoría financiera ni contable oficial: es guía práctica.
+              </p>
+            </div>
+          </div>
+          <div class="hero-metrics">
+            <div class="metric">
+              <span class="num">48h</span>
+              Lanzamiento guiado de negocio
+            </div>
+            <div class="metric">
+              <span class="num">Paso a paso</span>
+              Sin tecnicismos innecesarios
+            </div>
+            <div class="metric">
+              <span class="num">En español / EN</span>
+              Pensado para LATAM y global
+            </div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section id="agents" class="section">
+      <div class="section-header">
+        <h2 class="section-title">Los agentes de la suite</h2>
+        <p class="section-sub">
+          Combina visión de negocio con orden financiero desde el inicio.
+          Usa uno o los dos asistentes según la etapa en la que estés.
+        </p>
+      </div>
+
+      <div class="cards-grid">
+        <article class="card">
+          <div class="card-header">
+            <div>
+              <span class="badge">Estrategia & Lanzamiento</span>
+              <h3>Open Agent-AI · Socio para lanzar tu negocio</h3>
+              <p>
+                Asistente estratégico para crear y lanzar negocios digitales
+                con ideas claras, pasos simples y ejecución rápida.
+              </p>
+            </div>
+          </div>
+          <ul>
+            <li><span class="bullet">•</span><span>Propone ideas rentables si aún no tienes una.</span></li>
+            <li><span class="bullet">•</span><span>Crea nombre, slogan, paleta y prompts para tu logo.</span></li>
+            <li><span class="bullet">•</span><span>Diseña estructura de página o landing lista para implementar.</span></li>
+            <li><span class="bullet">•</span><span>Te da un plan de acción en 48h con tareas concretas.</span></li>
+          </ul>
+          <div class="card-footer">
+            <a class="btn btn-primary" href="https://chatgpt.com/g/g-690424d08214819191117490375ace89-open-agent-ai" target="_blank" rel="noopener noreferrer">
+              Abrir Open Agent-AI
+            </a>
+            <div class="card-cta">
+              ES + EN · <span>Enfocado en acción, no teoría.</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <div>
+              <span class="badge">Finanzas & Organización</span>
+              <h3>Auditra · Asistente contable para freelancers</h3>
+              <p>
+                Asistente contable inteligente para freelancers y pequeños negocios.
+                Te acompaña a organizar ingresos, gastos y facturación con calma.
+              </p>
+            </div>
+          </div>
+          <ul>
+            <li><span class="bullet">•</span><span>Te ayuda a listar y clasificar ingresos y gastos.</span></li>
+            <li><span class="bullet">•</span><span>Ofrece plantillas de control básicas y entendibles.</span></li>
+            <li><span class="bullet">•</span><span>Te guía con lenguaje simple, sin jerga contable pesada.</span></li>
+            <li><span class="bullet">•</span><span>No reemplaza a tu contador; te prepara para hablar con él.</span></li>
+          </ul>
+          <div class="card-footer">
+            <a class="btn btn-ghost" href="https://chatgpt.com/g/g-692d0fd4996c81918fdb7fbdaa916ef4-auditra" target="_blank" rel="noopener noreferrer">
+              Abrir Auditra
+            </a>
+            <div class="card-cta">
+              ES + EN · <span>Guía práctica, no asesoría financiera.</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="como-funciona" class="section">
+      <div class="section-header">
+        <h2 class="section-title">Cómo funciona la suite</h2>
+        <p class="section-sub">
+          Empieza por claridad de negocio con Open Agent-AI, luego ordena tus números con Auditra.
+          Puedes volver cuantas veces lo necesites: están diseñados como socios de largo plazo.
+        </p>
+      </div>
+      <p style="font-size:0.88rem; color:var(--muted); max-width:46rem;">
+        La suite OpenHub-AI no vende promesas de dinero rápido.
+        Son herramientas de apoyo estratégico y organizativo,
+        pensadas para creadores, freelancers y pequeños negocios
+        que quieren avanzar con menos ruido, más enfoque y acompañamiento guiado por IA.
+      </p>
+    </section>
+
+    <section id="legal" class="section disclaimer">
+      <h2 style="font-size:0.9rem; text-transform:uppercase; letter-spacing:0.18em; margin-bottom:0.5rem;">
+        Nota importante · Important notice
+      </h2>
+      <p>
+        Open Agent-AI y Auditra son asistentes de IA de apoyo educativo y organizativo.
+        No sustituyen asesoría profesional legal, fiscal, contable ni financiera.
+        Siempre valida decisiones clave con un profesional de confianza en tu país.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div>
+        © <span id="year"></span> OpenHub-AI Suite. Todos los derechos reservados.
+      </div>
+      <div class="footer-links">
+        <a href="/terms.html">Términos de servicio</a>
+        <a href="/privacy.html">Política de privacidad</a>
+        <a href="/refunds.html">Política de reembolsos</a>
+      </div>
+    </div>
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+  </footer>
+</body>
+</html>
